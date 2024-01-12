@@ -1,0 +1,14 @@
+﻿ARP request:
+Computer client Send a broadcast to all the clients on the network saying who has this "MAC"
+ARP response:
+My mac is .....
+
+
+Discover clients on network:
+steps
+1. Create arp request directed to broadcast MAC asking for IP
+2. Send packet and receive response
+3. parse the response
+4. print result
+
+https://scapy.readthedocs.io/en/latest/usage.html#send-and-receive-packets-sr
