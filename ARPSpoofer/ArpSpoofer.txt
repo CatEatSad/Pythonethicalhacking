@@ -1,8 +1,8 @@
-tool for arpspoofer
+tool for sharpshooter
 
-arpspoof -i ( interface) + name + -t (target) iptarget (ip want to spoof)
+arpspoof -i ( interface) + name + -t (target) ip_target (ip want to spoof)
 
-you must do it with target and router , because arp is u fake ip with target and tell the router that i am the target and you tell the target that i am the router 
+you must do it with target and router , because arp is u fake ip with target and tell the router that I am the target, and you tell the target that I am the router
 
 example:
 arpspoof -i eth0 -t 192.168.88.129 192.168.88.2(tell the target)
