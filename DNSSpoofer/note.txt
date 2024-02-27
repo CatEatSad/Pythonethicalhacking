@@ -1,0 +1,5 @@
+netfilterqueue : a queue contains package flow through my machine
+iptables -I FORWARD -j NFQUEUE --queue-num 0 : create a nfqueue to catch forward packet
+iptables -I INPUT -j NFQUEUE --queue-num 0
+
+iptables --flush : delete queue
