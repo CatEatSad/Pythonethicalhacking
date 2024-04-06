@@ -1,0 +1,1 @@
+bettercap -iface (interface) -caplet hstshijack/hstshijack
