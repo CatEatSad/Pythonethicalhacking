@@ -43,8 +43,8 @@ def restore(destination_ip, source_ip):
 
 
 os.system("echo 1 > /proc/sys/net/ipv4/ip_forward")
-target_ip = "192.168.88.129"
-gateway_ip = "192.168.88.2"
+target_ip = "192.168.233.139"
+gateway_ip = "192.168.233.2"
 sent_packets_count = 0
 try:
     while True:
